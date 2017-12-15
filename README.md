@@ -61,89 +61,107 @@ Mashape		|
 
 ## How to Build
 
-The generated code uses a few Gradle dependencies e.g., Jackson, Volley,
-and Apache HttpClient. The reference to these dependencies is already
-added in the build.gradle file will be installed automatically. Therefore,
-you will need internet access for a successful build.
+The generated code has dependencies over external libraries like UniRest. These dependencies are defined in the ```composer.json``` file that comes with the SDK. 
+To resolve these dependencies, we use the Composer package manager which requires PHP greater than 5.3.2 installed in your system. 
+Visit [https://getcomposer.org/download/](https://getcomposer.org/download/) to download the installer file for Composer and run it in your system. 
+Open command prompt and type ```composer --version```. This should display the current version of the Composer installed if the installation was successful.
 
-* In order to open the client library in Android Studio click on ``` Open an Existing Android Project ```.
+* Using command line, navigate to the directory containing the generated files (including ```composer.json```) for the SDK. 
+* Run the command ```composer install```. This should install all the required dependencies and create the ```vendor``` directory in your project directory.
 
-![Importing SDK into Android Studio - Step 1](https://apidocs.io/illustration/android?step=import1&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+![Building SDK - Step 1](https://apidocs.io/illustration/php?step=installDependencies&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
-* Browse to locate the folder containing the source code. Select the location of the CodeGenAndTransformerAPI gradle project and click ``` Ok ```.
+### [For Windows Users Only] Configuring CURL Certificate Path in php.ini
 
-![Importing SDK into Android Studio - Step 2](https://apidocs.io/illustration/android?step=import2&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+CURL used to include a list of accepted CAs, but no longer bundles ANY CA certs. So by default it will reject all SSL certificates as unverifiable. You will have to get your CA's cert and point curl at it. The steps are as follows:
 
-* Upon successful import, the project can be built by clicking on ``` Build > Make Project ``` or  pressing ``` Ctrl + F9 ```.
+1. Download the certificate bundle (.pem file) from [https://curl.haxx.se/docs/caextract.html](https://curl.haxx.se/docs/caextract.html) on to your system.
+2. Add curl.cainfo = "PATH_TO/cacert.pem" to your php.ini file located in your php installation. “PATH_TO” must be an absolute path containing the .pem file.
 
-![Importing SDK into Android Studio - Step 3](https://apidocs.io/illustration/android?step=import3&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+```ini
+[curl]
+; A default value for the CURLOPT_CAINFO option. This is required to be an
+; absolute path.
+;curl.cainfo =
+```
 
 ## How to Use
 
 The following section explains how to use the CodeGenAndTransformerAPI library in a new project.
 
-### 1. Starting a new project 
+### 1. Open Project in an IDE
 
-For starting a new project, click on ``` Create New Android Studio Project ```.
+Open an IDE for PHP like PhpStorm. The basic workflow presented here is also applicable if you prefer using a different editor or IDE.
 
-![Add a new project in Android Studio - Step 1](https://apidocs.io/illustration/android?step=createNewProject0&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+![Open project in PHPStorm - Step 1](https://apidocs.io/illustration/php?step=openIDE&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
-Here, configure the new project by adding the name, domain and location of the sample application followed by clicking ``` Next ```.
+Click on ```Open``` in PhpStorm to browse to your generated SDK directory and then click ```OK```.
 
-![Create a new Android Studio Project - Step 2](https://apidocs.io/illustration/android?step=createNewProject1&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+![Open project in PHPStorm - Step 2](https://apidocs.io/illustration/php?step=openProject0&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)     
 
-Following this, select the `Phone and Tablet` option as shown in the illustration below and click `Next`.
+### 2. Add a new Test Project
 
-![Create a new Android Studio Project - Step 3](https://apidocs.io/illustration/android?step=createNewProject2&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+Create a new directory by right clicking on the solution name as shown below:
 
-In the following step, choose ``` Empty Activity ``` as the activity type and click ``` Next ```.
+![Add a new project in PHPStorm - Step 1](https://apidocs.io/illustration/php?step=createDirectory&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
-![Create a new Android Studio Project - Step 4](https://apidocs.io/illustration/android?step=createNewProject3&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+Name the directory as "test"
 
-In this step, provide an ``` Activity Name ``` and ``` Layout Name ``` and click ``` Finish ```.  This would take you to the newly created project.
+![Add a new project in PHPStorm - Step 2](https://apidocs.io/illustration/php?step=nameDirectory&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
+   
+Add a PHP file to this project
 
-![Create a new Android Studio Project - Step 4](https://apidocs.io/illustration/android?step=createNewProject4&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+![Add a new project in PHPStorm - Step 3](https://apidocs.io/illustration/php?step=createFile&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
-### 2. Add reference of the library project
+Name it "testSDK"
 
-In order to add a dependency to this sample application, click on the android button shown in the project explorer on the left side as shown in the picture. Click on ``` Project ``` in the drop down that emerges.  
+![Add a new project in PHPStorm - Step 4](https://apidocs.io/illustration/php?step=nameFile&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
-![Adding dependency to the client library - Step 1](https://apidocs.io/illustration/android?step=testProject0&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+Depending on your project setup, you might need to include composer's autoloader in your PHP code to enable auto loading of classes.
 
-Right click the sample application in the project explorer and click on ``` New > Module ```  as shown in the picture.
+```PHP
+require_once "../vendor/autoload.php";
+```
 
-![Adding dependency to the client library - Step 2](https://apidocs.io/illustration/android?step=testProject1&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+It is important that the path inside require_once correctly points to the file ```autoload.php``` inside the vendor directory created during dependency installations.
 
-Choose ``` Import Gradle Project ``` and click ``` Next ```.
+![Add a new project in PHPStorm - Step 4](https://apidocs.io/illustration/php?step=projectFiles&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
-![Adding dependency to the client library - Step 3](https://apidocs.io/illustration/android?step=testProject2&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+After this you can add code to initialize the client library and acquire the instance of a Controller class. Sample code to initialize the client library and using controller methods is given in the subsequent sections.
 
-Click on ``` Finish ``` which would take you back to the sample application with the refernced SDK. 
+### 3. Run the Test Project
 
-![Adding dependency to the client library - Step 4](https://apidocs.io/illustration/android?step=testProject3&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+To run your project you must set the Interpreter for your project. Interpreter is the PHP engine installed on your computer.
 
-In the following step naigate to the ``` SampleApplication >  app > build.gradle ``` file and add the following line ```compile project(path: ':CodeGenAndTransformerAPI')``` to the dependencies section as shown in the illustration below.
+Open ```Settings``` from ```File``` menu.
 
-![Adding dependency to the client library - Step 5](https://apidocs.io/illustration/android?step=testProject4&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+![Run Test Project - Step 1](https://apidocs.io/illustration/php?step=openSettings&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
-Finally, press ``` Sync Now ``` in the warning visible as shown in the picture below.
+Select ```PHP``` from within ```Languages & Frameworks```
 
-![Adding dependency to the client library - Step 6](https://apidocs.io/illustration/android?step=testProject5&workspaceFolder=CodeGen%20and%20Transformer%20API&workspaceName=CodeGenAndTransformerAPI&projectName=CodeGenAndTransformerAPILib&rootNamespace=io.apimatic)
+![Run Test Project - Step 2](https://apidocs.io/illustration/php?step=setInterpreter0&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
-### 3. Write sample code
+Browse for Interpreters near the ```Interpreter``` option and choose your interpreter.
 
-Once the ``` SampleApplication ``` is created, a file named ``` SampleApplication > app > src > main > java > MainActivity ``` will be visible in the *Project Explorer* with an ``` onCreate ``` method. This is the entry point for the execution of the created project.
-Here, you can add code to initialize the client library and instantiate a *Controller* class. Sample code to initialize the client library and using controller methods is given in the subsequent sections.
+![Run Test Project - Step 3](https://apidocs.io/illustration/php?step=setInterpreter1&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
+
+Once the interpreter is selected, click ```OK```
+
+![Run Test Project - Step 4](https://apidocs.io/illustration/php?step=setInterpreter2&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
+
+To run your project, right click on your PHP file inside your Test project and click on ```Run```
+
+![Run Test Project - Step 5](https://apidocs.io/illustration/php?step=runProject&workspaceFolder=CodeGen%20and%20Transformer%20API-PHP)
 
 ## How to Test
 
-The generated code and the server can be tested using automatically generated test cases. 
-JUnit is used as the testing framework and test runner.
+Unit tests in this SDK can be run using PHPUnit. 
 
-In Android Studio, for running the tests do the following:
+1. First install the dependencies using composer including the `require-dev` dependencies.
+2. Run `vendor\bin\phpunit --verbose` from commandline to execute tests. If you have 
+   installed PHPUnit globally, run tests using `phpunit --verbose` instead.
 
-1. Right click on *SampleApplication > CodeGenAndTransformerAPILib > androidTest > java)* from the project explorer.
-2. Select "Run All Tests" or use "Ctrl + Shift + F10" to run the Tests.
+You can change the PHPUnit test configuration in the `phpunit.xml` file.
 
 ## Initialization
 
@@ -157,15 +175,13 @@ In order to setup authentication and initialization of the API client, you need 
 
 
 
-API client can be initialized as following. The `appContext` being passed is the Android application [`Context`](https://developer.android.com/reference/android/content/Context.html).
+API client can be initialized as following.
 
-```java
-// Configuration parameters and credentials
-String basicAuthUserName = "basicAuthUserName"; // The username to use with basic authentication
-String basicAuthPassword = "basicAuthPassword"; // The password to use with basic authentication
+```php
+$basicAuthUserName = 'basicAuthUserName'; // The username to use with basic authentication
+$basicAuthPassword = 'basicAuthPassword'; // The password to use with basic authentication
 
-io.apimatic.Configuration.initialize(appContext);
-CodeGenAndTransformerAPIClient client = new CodeGenAndTransformerAPIClient(basicAuthUserName, basicAuthPassword);
+$client = new CodeGenAndTransformerAPILib\CodeGenAndTransformerAPIClient($basicAuthUserName, $basicAuthPassword);
 ```
 
 
@@ -177,29 +193,28 @@ CodeGenAndTransformerAPIClient client = new CodeGenAndTransformerAPIClient(basic
 * [APIDescriptionValidationController](#api_description_validation_controller)
 * [APITransformerController](#api_transformer_controller)
 
-## <a name="code_generation_controller"></a>![Class: ](https://apidocs.io/img/class.png "io.apimatic.controllers.CodeGenerationController") CodeGenerationController
+## <a name="code_generation_controller"></a>![Class: ](https://apidocs.io/img/class.png ".CodeGenerationController") CodeGenerationController
 
 ### Get singleton instance
 
 The singleton instance of the ``` CodeGenerationController ``` class can be accessed from the API Client.
 
-```java
-CodeGenerationController codeGeneration = client.getCodeGeneration();
+```php
+$codeGeneration = $client->getCodeGeneration();
 ```
 
-### <a name="using_file_as_string_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.CodeGenerationController.usingFileAsStringAsync") usingFileAsStringAsync
+### <a name="using_file_as_string"></a>![Method: ](https://apidocs.io/img/method.png ".CodeGenerationController.usingFileAsString") usingFileAsString
 
 > The code generation endpoint. The response is a path to the generated zip file relative to https://apimatic.io/
 
 
-```java
-void usingFileAsStringAsync(
-        final String name,
-        final Format format,
-        final Template template,
-        final File body,
-        final Integer dl,
-        final APICallBack<String> callBack)
+```php
+function usingFileAsString(
+        $name,
+        $format,
+        $template,
+        $body,
+        $dl = 0)
 ```
 
 #### Parameters
@@ -213,23 +228,17 @@ void usingFileAsStringAsync(
 | dl |  ``` Optional ```  ``` DefaultValue ```  | Optional |
 
 
+
 #### Example Usage
 
-```java
-String name = "name";
-Format format = Format.fromString("Enum_API Blueprint");
-Template template = Template.fromString("cs_portable_net_lib");
-File body = new File("PathToFile");
-Integer dl = 0;
-// Invoking the API call with sample inputs
-codeGeneration.usingFileAsStringAsync(name, format, template, body, dl, new APICallBack<String>() {
-    public void onSuccess(HttpContext context, String response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$name = 'name';
+$format = string::ENUM_API BLUEPRINT;
+$template = string::CS_PORTABLE_NET_LIB;
+$body = "PathToFile";
+$dl = 0;
+
+$result = $codeGeneration->usingFileAsString($name, $format, $template, $body, $dl);
 
 ```
 
@@ -242,19 +251,18 @@ codeGeneration.usingFileAsStringAsync(name, format, template, body, dl, new APIC
 
 
 
-### <a name="using_url_as_string_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.CodeGenerationController.usingUrlAsStringAsync") usingUrlAsStringAsync
+### <a name="using_url_as_string"></a>![Method: ](https://apidocs.io/img/method.png ".CodeGenerationController.usingUrlAsString") usingUrlAsString
 
 > The code generation endpoint. The response is a path to the generated zip file relative to https://apimatic.io/
 
 
-```java
-void usingUrlAsStringAsync(
-        final Template template,
-        final Format format,
-        final String name,
-        final String descriptionUrl,
-        final Integer dl,
-        final APICallBack<String> callBack)
+```php
+function usingUrlAsString(
+        $template,
+        $format,
+        $name,
+        $descriptionUrl,
+        $dl = 0)
 ```
 
 #### Parameters
@@ -268,23 +276,17 @@ void usingUrlAsStringAsync(
 | dl |  ``` Optional ```  ``` DefaultValue ```  | Optional |
 
 
+
 #### Example Usage
 
-```java
-Template template = Template.fromString("cs_portable_net_lib");
-Format format = Format.fromString("Enum_API Blueprint");
-String name = "name";
-String descriptionUrl = "descriptionUrl";
-Integer dl = 0;
-// Invoking the API call with sample inputs
-codeGeneration.usingUrlAsStringAsync(template, format, name, descriptionUrl, dl, new APICallBack<String>() {
-    public void onSuccess(HttpContext context, String response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$template = string::CS_PORTABLE_NET_LIB;
+$format = string::ENUM_API BLUEPRINT;
+$name = 'name';
+$descriptionUrl = 'descriptionUrl';
+$dl = 0;
+
+$result = $codeGeneration->usingUrlAsString($template, $format, $name, $descriptionUrl, $dl);
 
 ```
 
@@ -297,19 +299,18 @@ codeGeneration.usingUrlAsStringAsync(template, format, name, descriptionUrl, dl,
 
 
 
-### <a name="using_file_as_binary_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.CodeGenerationController.usingFileAsBinaryAsync") usingFileAsBinaryAsync
+### <a name="using_file_as_binary"></a>![Method: ](https://apidocs.io/img/method.png ".CodeGenerationController.usingFileAsBinary") usingFileAsBinary
 
 > The code generation endpoint! Upload a file and convert it to the given format. The API description format of uploaded file will be detected automatically. The response is generated zip file as per selected template.
 
 
-```java
-void usingFileAsBinaryAsync(
-        final String name,
-        final Format format,
-        final Template template,
-        final File body,
-        final Integer dl,
-        final APICallBack<InputStream> callBack)
+```php
+function usingFileAsBinary(
+        $name,
+        $format,
+        $template,
+        $body,
+        $dl = 1)
 ```
 
 #### Parameters
@@ -323,23 +324,17 @@ void usingFileAsBinaryAsync(
 | dl |  ``` Optional ```  ``` DefaultValue ```  | Optional |
 
 
+
 #### Example Usage
 
-```java
-String name = "name";
-Format format = Format.fromString("Enum_API Blueprint");
-Template template = Template.fromString("cs_portable_net_lib");
-File body = new File("PathToFile");
-Integer dl = 1;
-// Invoking the API call with sample inputs
-codeGeneration.usingFileAsBinaryAsync(name, format, template, body, dl, new APICallBack<InputStream>() {
-    public void onSuccess(HttpContext context, InputStream response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$name = 'name';
+$format = string::ENUM_API BLUEPRINT;
+$template = string::CS_PORTABLE_NET_LIB;
+$body = "PathToFile";
+$dl = 1;
+
+$result = $codeGeneration->usingFileAsBinary($name, $format, $template, $body, $dl);
 
 ```
 
@@ -352,19 +347,18 @@ codeGeneration.usingFileAsBinaryAsync(name, format, template, body, dl, new APIC
 
 
 
-### <a name="using_url_as_binary_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.CodeGenerationController.usingUrlAsBinaryAsync") usingUrlAsBinaryAsync
+### <a name="using_url_as_binary"></a>![Method: ](https://apidocs.io/img/method.png ".CodeGenerationController.usingUrlAsBinary") usingUrlAsBinary
 
 > Download API description from the given URL and convert it to the given format. The API description format of the provided file will be detected automatically. The response is generated zip file as per selected template.
 
 
-```java
-void usingUrlAsBinaryAsync(
-        final Template template,
-        final Format format,
-        final String name,
-        final String descriptionUrl,
-        final Integer dl,
-        final APICallBack<InputStream> callBack)
+```php
+function usingUrlAsBinary(
+        $template,
+        $format,
+        $name,
+        $descriptionUrl,
+        $dl = 1)
 ```
 
 #### Parameters
@@ -378,23 +372,17 @@ void usingUrlAsBinaryAsync(
 | dl |  ``` Optional ```  ``` DefaultValue ```  | Optional |
 
 
+
 #### Example Usage
 
-```java
-Template template = Template.fromString("cs_portable_net_lib");
-Format format = Format.fromString("Enum_API Blueprint");
-String name = "name";
-String descriptionUrl = "descriptionUrl";
-Integer dl = 1;
-// Invoking the API call with sample inputs
-codeGeneration.usingUrlAsBinaryAsync(template, format, name, descriptionUrl, dl, new APICallBack<InputStream>() {
-    public void onSuccess(HttpContext context, InputStream response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$template = string::CS_PORTABLE_NET_LIB;
+$format = string::ENUM_API BLUEPRINT;
+$name = 'name';
+$descriptionUrl = 'descriptionUrl';
+$dl = 1;
+
+$result = $codeGeneration->usingUrlAsBinary($template, $format, $name, $descriptionUrl, $dl);
 
 ```
 
@@ -407,18 +395,17 @@ codeGeneration.usingUrlAsBinaryAsync(template, format, name, descriptionUrl, dl,
 
 
 
-### <a name="using_apikey_as_binary_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.CodeGenerationController.usingApikeyAsBinaryAsync") usingApikeyAsBinaryAsync
+### <a name="using_apikey_as_binary"></a>![Method: ](https://apidocs.io/img/method.png ".CodeGenerationController.usingApikeyAsBinary") usingApikeyAsBinary
 
 > Convert an API from the user's account using the API's [API Integration Key](https://docs.apimatic.io/getting-started/manage-apis/#view-api-integration-key). The response is generated zip file as per selected template.
 > > Note: This endpoint does not require Basic Authentication.
 
 
-```java
-void usingApikeyAsBinaryAsync(
-        final String apikey,
-        final Template template,
-        final Integer dl,
-        final APICallBack<InputStream> callBack)
+```php
+function usingApikeyAsBinary(
+        $apikey,
+        $template,
+        $dl = 1)
 ```
 
 #### Parameters
@@ -430,21 +417,15 @@ void usingApikeyAsBinaryAsync(
 | dl |  ``` Optional ```  ``` DefaultValue ```  | Optional |
 
 
+
 #### Example Usage
 
-```java
-String apikey = "apikey";
-Template template = Template.fromString("cs_portable_net_lib");
-Integer dl = 1;
-// Invoking the API call with sample inputs
-codeGeneration.usingApikeyAsBinaryAsync(apikey, template, dl, new APICallBack<InputStream>() {
-    public void onSuccess(HttpContext context, InputStream response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$apikey = 'apikey';
+$template = string::CS_PORTABLE_NET_LIB;
+$dl = 1;
+
+$result = $codeGeneration->usingApikeyAsBinary($apikey, $template, $dl);
 
 ```
 
@@ -457,18 +438,17 @@ codeGeneration.usingApikeyAsBinaryAsync(apikey, template, dl, new APICallBack<In
 
 
 
-### <a name="using_apikey_as_string_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.CodeGenerationController.usingApikeyAsStringAsync") usingApikeyAsStringAsync
+### <a name="using_apikey_as_string"></a>![Method: ](https://apidocs.io/img/method.png ".CodeGenerationController.usingApikeyAsString") usingApikeyAsString
 
 > The code generation endpoint. The response is a path to the generated zip file relative to https://apimatic.io/
 > > Note: This endpoint does not require Basic Authentication.
 
 
-```java
-void usingApikeyAsStringAsync(
-        final String apikey,
-        final Template template,
-        final Integer dl,
-        final APICallBack<String> callBack)
+```php
+function usingApikeyAsString(
+        $apikey,
+        $template,
+        $dl = 0)
 ```
 
 #### Parameters
@@ -480,21 +460,15 @@ void usingApikeyAsStringAsync(
 | dl |  ``` Optional ```  ``` DefaultValue ```  | Optional |
 
 
+
 #### Example Usage
 
-```java
-String apikey = "apikey";
-Template template = Template.fromString("cs_portable_net_lib");
-Integer dl = 0;
-// Invoking the API call with sample inputs
-codeGeneration.usingApikeyAsStringAsync(apikey, template, dl, new APICallBack<String>() {
-    public void onSuccess(HttpContext context, String response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$apikey = 'apikey';
+$template = string::CS_PORTABLE_NET_LIB;
+$dl = 0;
+
+$result = $codeGeneration->usingApikeyAsString($apikey, $template, $dl);
 
 ```
 
@@ -509,25 +483,23 @@ codeGeneration.usingApikeyAsStringAsync(apikey, template, dl, new APICallBack<St
 
 [Back to List of Controllers](#list_of_controllers)
 
-## <a name="api_description_validation_controller"></a>![Class: ](https://apidocs.io/img/class.png "io.apimatic.controllers.APIDescriptionValidationController") APIDescriptionValidationController
+## <a name="api_description_validation_controller"></a>![Class: ](https://apidocs.io/img/class.png ".APIDescriptionValidationController") APIDescriptionValidationController
 
 ### Get singleton instance
 
 The singleton instance of the ``` APIDescriptionValidationController ``` class can be accessed from the API Client.
 
-```java
-APIDescriptionValidationController aPIDescriptionValidation = client.getAPIDescriptionValidation();
+```php
+$aPIDescriptionValidation = $client->getAPIDescriptionValidation();
 ```
 
-### <a name="using_file_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.APIDescriptionValidationController.usingFileAsync") usingFileAsync
+### <a name="using_file"></a>![Method: ](https://apidocs.io/img/method.png ".APIDescriptionValidationController.usingFile") usingFile
 
 > This endpoint can be used to validate an API description document *on the fly* and see detailed error messages along with any warnings or useful information.
 
 
-```java
-void usingFileAsync(
-        final File body,
-        final APICallBack<ValidateAnAPIDescriptionResponse> callBack)
+```php
+function usingFile($body)
 ```
 
 #### Parameters
@@ -537,32 +509,24 @@ void usingFileAsync(
 | body |  ``` Required ```  | The input file to use for validation |
 
 
+
 #### Example Usage
 
-```java
-File body = new File("PathToFile");
-// Invoking the API call with sample inputs
-aPIDescriptionValidation.usingFileAsync(body, new APICallBack<ValidateAnAPIDescriptionResponse>() {
-    public void onSuccess(HttpContext context, ValidateAnAPIDescriptionResponse response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$body = "PathToFile";
+
+$result = $aPIDescriptionValidation->usingFile($body);
 
 ```
 
 
-### <a name="using_url_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.APIDescriptionValidationController.usingUrlAsync") usingUrlAsync
+### <a name="using_url"></a>![Method: ](https://apidocs.io/img/method.png ".APIDescriptionValidationController.usingUrl") usingUrl
 
 > This endpoint can be used to validate an API description document *on the fly* from its public Uri, and see detailed error messages along with any warnings or useful information. This endpoint is useful for API descriptions with relative links e.g., includes (RAML) and paths (swagger).
 
 
-```java
-void usingUrlAsync(
-        final String descriptionUrl,
-        final APICallBack<ValidateAnAPIDescriptionResponse> callBack)
+```php
+function usingUrl($descriptionUrl)
 ```
 
 #### Parameters
@@ -572,32 +536,24 @@ void usingUrlAsync(
 | descriptionUrl |  ``` Required ```  | The absolute public Uri for an API description doucment |
 
 
+
 #### Example Usage
 
-```java
-String descriptionUrl = "descriptionUrl";
-// Invoking the API call with sample inputs
-aPIDescriptionValidation.usingUrlAsync(descriptionUrl, new APICallBack<ValidateAnAPIDescriptionResponse>() {
-    public void onSuccess(HttpContext context, ValidateAnAPIDescriptionResponse response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$descriptionUrl = 'descriptionUrl';
+
+$result = $aPIDescriptionValidation->usingUrl($descriptionUrl);
 
 ```
 
 
-### <a name="using_apikey_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.APIDescriptionValidationController.usingApikeyAsync") usingApikeyAsync
+### <a name="using_apikey"></a>![Method: ](https://apidocs.io/img/method.png ".APIDescriptionValidationController.usingApikey") usingApikey
 
 > This endpoint can be used to validate a *pre-configured* API description and see detailed error messages along with any warnings or useful information.
 
 
-```java
-void usingApikeyAsync(
-        final String apikey,
-        final APICallBack<ValidateAnAPIDescriptionResponse> callBack)
+```php
+function usingApikey($apikey)
 ```
 
 #### Parameters
@@ -607,46 +563,39 @@ void usingApikeyAsync(
 | apikey |  ``` Required ```  | The API Key of a pre-configured API description from APIMATIC |
 
 
+
 #### Example Usage
 
-```java
-String apikey = "apikey";
-// Invoking the API call with sample inputs
-aPIDescriptionValidation.usingApikeyAsync(apikey, new APICallBack<ValidateAnAPIDescriptionResponse>() {
-    public void onSuccess(HttpContext context, ValidateAnAPIDescriptionResponse response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$apikey = 'apikey';
+
+$result = $aPIDescriptionValidation->usingApikey($apikey);
 
 ```
 
 
 [Back to List of Controllers](#list_of_controllers)
 
-## <a name="api_transformer_controller"></a>![Class: ](https://apidocs.io/img/class.png "io.apimatic.controllers.APITransformerController") APITransformerController
+## <a name="api_transformer_controller"></a>![Class: ](https://apidocs.io/img/class.png ".APITransformerController") APITransformerController
 
 ### Get singleton instance
 
 The singleton instance of the ``` APITransformerController ``` class can be accessed from the API Client.
 
-```java
-APITransformerController aPITransformer = client.getAPITransformer();
+```php
+$aPITransformer = $client->getAPITransformer();
 ```
 
-### <a name="using_apikey_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.APITransformerController.usingApikeyAsync") usingApikeyAsync
+### <a name="using_apikey"></a>![Method: ](https://apidocs.io/img/method.png ".APITransformerController.usingApikey") usingApikey
 
 > Convert an API from the user's account using the API's [Api Integration Key](https://docs.apimatic.io/getting-started/manage-apis/#view-api-integration-key). The converted file is returned as the response.
 > > Note: This endpoint does not require Basic Authentication.
 
 
-```java
-void usingApikeyAsync(
-        final FormatTransformer format,
-        final String apikey,
-        final APICallBack<InputStream> callBack)
+```php
+function usingApikey(
+        $format,
+        $apikey)
 ```
 
 #### Parameters
@@ -657,20 +606,14 @@ void usingApikeyAsync(
 | apikey |  ``` Required ```  | Apikey of an already uploaded API Description on APIMATIC |
 
 
+
 #### Example Usage
 
-```java
-FormatTransformer format = FormatTransformer.fromString("apimatic");
-String apikey = "apikey";
-// Invoking the API call with sample inputs
-aPITransformer.usingApikeyAsync(format, apikey, new APICallBack<InputStream>() {
-    public void onSuccess(HttpContext context, InputStream response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$format = string::APIMATIC;
+$apikey = 'apikey';
+
+$result = $aPITransformer->usingApikey($format, $apikey);
 
 ```
 
@@ -682,16 +625,15 @@ aPITransformer.usingApikeyAsync(format, apikey, new APICallBack<InputStream>() {
 
 
 
-### <a name="using_url_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.APITransformerController.usingUrlAsync") usingUrlAsync
+### <a name="using_url"></a>![Method: ](https://apidocs.io/img/method.png ".APITransformerController.usingUrl") usingUrl
 
 > Download API description from the given URL and convert it to the given format. The API description format of the provided file will be detected automatically. The converted file is returned as the response.
 
 
-```java
-void usingUrlAsync(
-        final FormatTransformer format,
-        final String descriptionUrl,
-        final APICallBack<InputStream> callBack)
+```php
+function usingUrl(
+        $format,
+        $descriptionUrl)
 ```
 
 #### Parameters
@@ -702,20 +644,14 @@ void usingUrlAsync(
 | descriptionUrl |  ``` Required ```  | The URL where the API description will be downloaded from |
 
 
+
 #### Example Usage
 
-```java
-FormatTransformer format = FormatTransformer.fromString("apimatic");
-String descriptionUrl = "descriptionUrl";
-// Invoking the API call with sample inputs
-aPITransformer.usingUrlAsync(format, descriptionUrl, new APICallBack<InputStream>() {
-    public void onSuccess(HttpContext context, InputStream response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$format = string::APIMATIC;
+$descriptionUrl = 'descriptionUrl';
+
+$result = $aPITransformer->usingUrl($format, $descriptionUrl);
 
 ```
 
@@ -727,16 +663,15 @@ aPITransformer.usingUrlAsync(format, descriptionUrl, new APICallBack<InputStream
 
 
 
-### <a name="using_file_async"></a>![Method: ](https://apidocs.io/img/method.png "io.apimatic.controllers.APITransformerController.usingFileAsync") usingFileAsync
+### <a name="using_file"></a>![Method: ](https://apidocs.io/img/method.png ".APITransformerController.usingFile") usingFile
 
 > Upload a file and convert it to the given format. The API description format of the uploaded file will be detected automatically. The converted file is returned as the response.
 
 
-```java
-void usingFileAsync(
-        final FormatTransformer format,
-        final File file,
-        final APICallBack<InputStream> callBack)
+```php
+function usingFile(
+        $format,
+        $file)
 ```
 
 #### Parameters
@@ -747,20 +682,14 @@ void usingFileAsync(
 | file |  ``` Required ```  | The input file to convert |
 
 
+
 #### Example Usage
 
-```java
-FormatTransformer format = FormatTransformer.fromString("apimatic");
-File file = new File("PathToFile");
-// Invoking the API call with sample inputs
-aPITransformer.usingFileAsync(format, file, new APICallBack<InputStream>() {
-    public void onSuccess(HttpContext context, InputStream response) {
-        // TODO success callback handler
-    }
-    public void onFailure(HttpContext context, Throwable error) {
-        // TODO failure callback handler
-    }
-});
+```php
+$format = string::APIMATIC;
+$file = "PathToFile";
+
+$result = $aPITransformer->usingFile($format, $file);
 
 ```
 
